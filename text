@@ -1,0 +1,59 @@
+   print_r($_FILES['foto_u']);
+    exit;
+    $formatosPermitidos = array("png","jpeg","jpg","gif");
+    $extensao = pathinfo ($_FILES['foto_u']['name'],PATHINFO_EXTENSION);
+
+ if(in_array($extensao, $formatosPermitidos)):
+    $pasta = "../img/";
+    $temporario =$_FILES['foto_u']['tmp_name'];
+    $novoNome = uniqid().".$extensao";
+    var_dump($novoNome);
+    
+ if(move_uploaded_file($temporario, $pasta.$novoNome)):
+
+
+    $mensagem = "upload feito com sucesso.";
+ else:
+    $mensagem = "Erro, nao foi possivel fazer uploan";
+ endif;
+
+else:
+    $mensagem ="formato invalido";
+endif; 
+endif;
+
+
+!if(count($_POST > 0)){
+
+    if(!filter_input(INPUT_POST, "nome_usuario")){
+        echo 'Nome é obrigatorio !'.'<br>';
+    }
+
+    if(!filter_var($_POST['email_u'], FILTER_VALIDATE_EMAIL)){
+        echo 'email é invalido !'.'<br>';
+    }
+
+    if(!filter_input(INPUT_POST, "telefone_u")){
+        echo 'Telefone é obrigatorio !'.'<br>';
+    }
+
+    if(!filter_input(INPUT_POST, "senha_u")){
+        echo 'senha é obrigatorio !'.'<br>';
+    }
+
+    if(!filter_input(INPUT_FILE, "foto_u")){
+        echo 'foto é obrigatorio !'.'<br>';
+    }
+   
+}
+
+if (isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['senha']) && !empty($_POST['senha'])){
+    $email = addslashes($_POST['email']);
+    $senha = md5(addslashes($_POST['senha']));
+    $date = time();//hora atual.
+    $token = md5($email.$date);//token de login.
+}else{
+
+    header("location: login.php");
+}
+     
